@@ -1,4 +1,10 @@
 <?php
+/**
+ * This version of Markdown is modified to htmlspecialchars() calls because I've
+ * already encoded everything once. Caravela Markdown doesn't accept any HTML
+ * tags and pre-encodes all bug descriptions.
+ */
+
 #
 # Markdown  -  A text-to-HTML conversion tool for web writers
 #
@@ -967,7 +973,6 @@ class Markdown implements MarkdownInterface {
 		$codeblock = $matches[1];
 
 		$codeblock = $this->outdent($codeblock);
-		$codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
 
 		# trim leading newlines and trailing newlines
 		$codeblock = preg_replace('/\A\n+|\n+\z/', '', $codeblock);
@@ -981,7 +986,7 @@ class Markdown implements MarkdownInterface {
 	#
 	# Create a code span markup for $code. Called from handleSpanToken.
 	#
-		$code = htmlspecialchars(trim($code), ENT_NOQUOTES);
+		$code = trim($code);
 		return $this->hashPart("<code>$code</code>");
 	}
 
@@ -2854,7 +2859,6 @@ abstract class _MarkdownExtra_TmpImpl extends \Michelf\Markdown {
 		$classname =& $matches[2];
 		$attrs     =& $matches[3];
 		$codeblock = $matches[4];
-		$codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
 		$codeblock = preg_replace_callback('/^\n+/',
 			array($this, '_doFencedCodeBlocks_newlines'), $codeblock);
 
